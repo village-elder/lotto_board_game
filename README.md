@@ -6,8 +6,7 @@
 випадає рівно один раз. Готовий макет для друку на A4, а також векторний
 SVG-експорт для 3D-друку/ЧПУ.
 
-**Демо:** _додати посилання на GitHub Pages після публікації_
-(Settings → Pages → Deploy from branch `main`).
+**Демо:** https://village-elder.github.io/lotto_board_game/
 
 ![Набір із шести карток](docs/images/set-preview.png)
 
