@@ -1,0 +1,444 @@
+/* ═══════════════════════════════════════════════════════════════
+   Генератор карток лото — стилі
+   Візуальна система: Classical (Cormorant Garamond + Lora,
+   тепле паперове тло, золото як штрих, волосяні лінійки).
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* — токени системи — */
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-text: #201f1d;
+  --color-accent: #b68235;
+  --color-divider: color-mix(in srgb, #201f1d 16%, transparent);
+  --color-neutral-200: #eae7e7;
+  --color-neutral-300: #d7d3d3;
+  --color-neutral-600: #7d7979;
+  --color-neutral-900: #2d2b2b;
+  --color-accent-100: #fff3e4;
+  --color-accent-600: #a06f24;
+  --color-accent-700: #7d5411;
+
+  --font-heading: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Lora", Georgia, serif;
+
+  --space-1: 4.6px;
+  --space-2: 9.2px;
+  --space-3: 13.8px;
+  --space-4: 18.4px;
+  --space-6: 27.6px;
+  --space-8: 36.8px;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  --edge: clamp(18px, 4vw, 56px);
+  --leading: 26px;
+
+  /* — токени картки (керуються панеллю налаштувань) — */
+  --card-bg: #f0e6d2;
+  --card-border: #7d5411;
+  --grid-line: #a98f62;
+  --grid-thickness: 1px;
+  --grid-frame-thickness: 1px;
+  --text-color: #201f1d;
+  --number-color: #2d2b2b;
+
+  --number-font: "Overpass", Arial, sans-serif;
+  --number-font-size: 26px;
+  --number-font-weight: 500;
+
+  --border-width: 2px;
+  --border-radius: 3px;
+  --card-padding: 10px;
+  --row-height: 40px;
+  --cards-per-row: 2;
+  --empty-pattern-alpha: 0.13;
+  --badge-display: flex;
+  --badge-radius: 2px;
+}
+
+/* Overpass (типовий шрифт чисел) — локальні файли (vendor/fonts),
+   без запиту до Google Fonts: надійно й не залежить від мережі.
+   Офіційний "desktop"-реліз (2016, delvefonts.com/redhat.com) — саме
+   ця версія має класичну "шосейну" відкриту цифру "4", на відміну від
+   пізнішого вебшрифту з Google Fonts. Немає окремого насичення Medium
+   (500) — браузер підбере найближче (400 чи 600) автоматично. */
+@font-face { font-family: "Overpass"; font-weight: 300; src: url("vendor/fonts/overpass-300.otf") format("opentype"); }
+@font-face { font-family: "Overpass"; font-weight: 400; src: url("vendor/fonts/overpass-400.otf") format("opentype"); }
+@font-face { font-family: "Overpass"; font-weight: 600; src: url("vendor/fonts/overpass-600.otf") format("opentype"); }
+@font-face { font-family: "Overpass"; font-weight: 700; src: url("vendor/fonts/overpass-700.otf") format("opentype"); }
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--color-accent-700); text-underline-offset: 3px; }
+a:hover { color: var(--color-accent-600); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--edge); }
+.rule { height: 1px; border: 0; margin: 0; background: var(--color-divider); }
+
+.kicker {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  font-feature-settings: "tnum" 1;
+  margin: 0;
+}
+
+/* ── шапка ─────────────────────────────────────────────── */
+.masthead {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--edge);
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-bg);
+  position: sticky; top: 0; z-index: 20;
+}
+.masthead-brand {
+  font-family: var(--font-heading);
+  font-size: 22px; letter-spacing: 0.02em;
+  display: flex; align-items: baseline; gap: var(--space-3);
+}
+.masthead-brand small {
+  font-family: var(--font-body);
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-neutral-600);
+  font-feature-settings: "tnum" 1;
+}
+.actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+/* ── кнопки ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: 14px; line-height: 1.2; color: var(--color-text);
+  background: transparent; border: 1px solid transparent;
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  border-radius: var(--radius-md);
+  min-height: 36px;
+  transition: background-color .12s ease, border-color .12s ease;
+}
+.btn svg { display: block; width: 15px; height: 15px; }
+.btn-primary { color: var(--color-accent-700); border-color: var(--color-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
+.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent); border-color: var(--color-accent); }
+.btn-secondary:active { background: color-mix(in srgb, var(--color-accent) 16%, transparent); }
+.btn-ghost { color: var(--color-neutral-600); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent); color: var(--color-text); }
+.btn-sm { font-size: 12.5px; min-height: 30px; padding: var(--space-1) var(--space-3); }
+
+/* ── титул ─────────────────────────────────────────────── */
+.intro { padding: calc(2 * var(--leading)) 0 var(--leading); }
+.intro h1 {
+  font-size: clamp(38px, 5.4vw, 68px);
+  line-height: 1.08;
+  margin: var(--space-3) 0 0;
+  margin-left: -0.042em;
+}
+.intro-note {
+  max-width: 56ch; margin-top: var(--space-4);
+  font-size: 15px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+  text-align: justify; hyphens: auto;
+}
+.intro-meta {
+  display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-4);
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--color-neutral-600);
+  font-feature-settings: "tnum" 1;
+}
+.intro-meta b { font-weight: 400; color: var(--color-text); }
+
+/* ── панель налаштувань ────────────────────────────────── */
+.settings { margin: var(--leading) 0 0; border-top: 1px solid var(--color-divider); }
+.settings > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding: var(--space-4) 0;
+  font-family: var(--font-heading); font-size: 21px;
+}
+.settings > summary::-webkit-details-marker { display: none; }
+.settings > summary:hover { color: var(--color-accent-700); }
+.summary-hint {
+  font-family: var(--font-body); font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--color-neutral-600);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.settings[open] > summary .chev { transform: rotate(180deg); }
+.chev { transition: transform .15s ease; }
+
+.settings-body {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, max-content);
+  gap: var(--space-8);
+  padding-bottom: var(--space-8);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-6);
+}
+.groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-8); }
+.group { display: flex; flex-direction: column; gap: var(--space-3); }
+.group > .kicker { padding-bottom: var(--space-2); border-bottom: 1px solid var(--color-divider); }
+
+.field { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--space-3); }
+.field > label { font-size: 13.5px; color: color-mix(in srgb, var(--color-text) 82%, transparent); }
+.field-val {
+  font-size: 12px; color: var(--color-neutral-600);
+  font-feature-settings: "tnum" 1; min-width: 44px; text-align: right;
+}
+.field-stack { display: grid; gap: var(--space-2); grid-template-columns: 1fr; }
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  grid-column: 1 / -1;
+  width: 100%; height: 18px; background: transparent; cursor: pointer; margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track { height: 1px; background: var(--color-neutral-300); }
+input[type="range"]::-moz-range-track { height: 1px; background: var(--color-neutral-300); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 13px; height: 13px; margin-top: -6px;
+  border-radius: 50%; background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--color-bg); border: 1px solid var(--color-accent);
+}
+input[type="range"]:hover::-webkit-slider-thumb { background: var(--color-accent-100); }
+input[type="range"]:hover::-moz-range-thumb { background: var(--color-accent-100); }
+
+.swatch {
+  position: relative; width: 34px; height: 22px;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-sm);
+  overflow: hidden; cursor: pointer;
+}
+.swatch input[type="color"] {
+  position: absolute; inset: -6px; width: calc(100% + 12px); height: calc(100% + 12px);
+  border: 0; padding: 0; background: transparent; cursor: pointer;
+}
+
+.seg { display: inline-flex; border: 1px solid var(--color-divider); border-radius: var(--radius-md); overflow: hidden; }
+.seg label {
+  font-size: 12.5px; padding: 5px 11px; cursor: pointer;
+  border-left: 1px solid var(--color-divider);
+  color: var(--color-neutral-600);
+  transition: background-color .12s ease;
+}
+.seg label:first-of-type { border-left: 0; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
+.seg input:checked + span { }
+.seg label:has(input:checked) { background: color-mix(in srgb, var(--color-accent) 14%, transparent); color: var(--color-accent-700); }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+.badge-pos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; grid-column: 1 / -1; }
+.badge-pos-grid label {
+  font-size: 11px; text-align: center; padding: 5px 2px; cursor: pointer;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-sm);
+  color: var(--color-neutral-600);
+  transition: background-color .12s ease;
+}
+.badge-pos-grid input { position: absolute; opacity: 0; pointer-events: none; }
+.badge-pos-grid label:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
+.badge-pos-grid label:has(input:checked) { background: color-mix(in srgb, var(--color-accent) 14%, transparent); color: var(--color-accent-700); border-color: var(--color-accent); }
+.badge-pos-grid label:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+.check { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--color-accent); width: 15px; height: 15px; }
+
+.field select {
+  font-family: inherit; font-size: 12.5px; color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-sm);
+  padding: 4px 8px; cursor: pointer;
+}
+.field select:hover { border-color: var(--color-accent); }
+.field select:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+
+.file-field { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.file-field input[type="file"] { display: none; }
+.file-name { font-size: 12px; color: var(--color-neutral-600); }
+
+.presets { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* прев'ю в панелі */
+.preview-col { display: flex; flex-direction: column; gap: var(--space-3); }
+.preview-col .kicker { padding-bottom: var(--space-2); border-bottom: 1px solid var(--color-divider); }
+.preview-box { position: sticky; top: 84px; display: flex; flex-direction: column; gap: var(--space-3); max-width: 100%; overflow-x: auto; }
+/* max-width обмежує внесок цього абзацу в розрахунок ширини колонки
+   .settings-body (minmax(240px, max-content)) — інакше довший текст
+   роздуває max-content і стискає колонку .groups до вузької смужки. */
+.preview-foot { font-size: 12px; line-height: 1.5; color: var(--color-neutral-600); max-width: 300px; }
+
+/* ── аркуш карток ──────────────────────────────────────── */
+.sheet { padding: var(--leading) 0 calc(2 * var(--leading)); }
+.set { margin-top: var(--space-8); }
+.set:first-child { margin-top: 0; }
+.set-head {
+  display: flex; align-items: baseline; gap: var(--space-3);
+  padding-bottom: var(--space-2); margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-divider);
+}
+.set-head h2 { font-size: 22px; }
+.set-head span { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); }
+.cards { display: grid; grid-template-columns: repeat(var(--cards-per-row), minmax(0, 1fr)); gap: var(--space-6); justify-items: start; }
+
+/* ── картка ────────────────────────────────────────────── */
+.card {
+  position: relative;
+  width: max-content;
+  background-color: var(--card-bg);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(120, 92, 48, .05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120, 92, 48, .035) 0 1px, transparent 1px 4px);
+  border: var(--border-width) solid var(--card-border);
+  border-radius: var(--border-radius);
+  padding: var(--card-padding);
+}
+/* Місце під бейдж резервується з того боку, де він розташований, —
+   бейдж лишається повністю в межах рамки й не накладається на неї. */
+html[data-badge-position^="top-"] .card { padding-top: calc(var(--card-padding) + 24px); }
+html[data-badge-position^="bottom-"] .card { padding-bottom: calc(var(--card-padding) + 24px); }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(9, var(--row-height));
+  grid-auto-rows: var(--row-height);
+  border: var(--grid-frame-thickness) solid var(--grid-line);
+  background-color: var(--card-bg);
+  --empty-pattern-color: color-mix(in srgb, var(--card-border) calc(var(--empty-pattern-alpha) * 100%), transparent);
+  /* Візерунок порожніх клітинок малюється тут, одним суцільним шаром на
+     всю сітку — тому в сусідніх порожніх клітинках лінії/крапки завжди
+     збігаються й виглядають "з'єднаними", незалежно від розміру картки.
+     Заповнені клітинки (.cell:not(.is-empty)) просто маскують цей шар
+     суцільним --card-bg у своїх межах. */
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--empty-pattern-color) 0 1px,
+    transparent 1px 6px
+  );
+}
+html[data-empty-style="none"] .card-grid { background-image: none; }
+html[data-empty-style="cross"] .card-grid {
+  background-image:
+    repeating-linear-gradient(45deg, var(--empty-pattern-color) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-45deg, var(--empty-pattern-color) 0 1px, transparent 1px 7px);
+}
+html[data-empty-style="dots"] .card-grid {
+  background-image: radial-gradient(color-mix(in srgb, var(--card-border) calc(var(--empty-pattern-alpha) * 220%), transparent) 1px, transparent 1.4px);
+  background-size: 7px 7px;
+}
+html[data-empty-style="solid"] .card-grid {
+  background-image: none;
+  /* На відміну від інших стилів: тут потрібен суцільний непрозорий колір
+     (змішаний із --card-bg), а не напівпрозорий шар поверх фону — тому
+     не можна перевикористати --empty-pattern-color (він змішаний із
+     transparent, а не з --card-bg). */
+  background-color: color-mix(in srgb, var(--card-border) calc(var(--empty-pattern-alpha) * 100%), var(--card-bg));
+}
+
+.cell {
+  border-right: var(--grid-thickness) solid var(--grid-line);
+  border-bottom: var(--grid-thickness) solid var(--grid-line);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--number-font);
+  font-size: var(--number-font-size);
+  font-weight: var(--number-font-weight);
+  color: var(--number-color);
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1;
+}
+.cell:not(.is-empty) { background-color: var(--card-bg); }
+/* Крайні клітинки не дублюють межу — це вже власна рамка .card-grid,
+   незалежна від внутрішніх ліній між клітинками. */
+.cell:nth-child(9n) { border-right: none; }
+.cell:nth-child(n+19) { border-bottom: none; }
+
+.card-badge {
+  display: var(--badge-display);
+  align-items: center; justify-content: center;
+  position: absolute;
+  min-width: 30px; height: 20px; padding: 0 7px;
+  font-family: var(--number-font); font-weight: var(--number-font-weight); font-size: 11px; letter-spacing: 0.1em;
+  font-feature-settings: "tnum" 1;
+  color: var(--card-border);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--badge-radius);
+}
+html[data-badge-position="top-left"] .card-badge { top: var(--card-padding); left: var(--card-padding); }
+html[data-badge-position="top-center"] .card-badge { top: var(--card-padding); left: 50%; transform: translateX(-50%); }
+html[data-badge-position="top-right"] .card-badge { top: var(--card-padding); right: var(--card-padding); }
+html[data-badge-position="bottom-left"] .card-badge { bottom: var(--card-padding); left: var(--card-padding); }
+html[data-badge-position="bottom-center"] .card-badge { bottom: var(--card-padding); left: 50%; transform: translateX(-50%); }
+html[data-badge-position="bottom-right"] .card-badge { bottom: var(--card-padding); right: var(--card-padding); }
+
+/* ── підвал ────────────────────────────────────────────── */
+.page-foot {
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-6) 0 var(--space-8);
+  font-size: 12.5px; color: var(--color-neutral-600);
+  display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+}
+
+/* ── мобільні ──────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .settings-body { grid-template-columns: 1fr; }
+  .preview-box { position: static; max-width: 420px; }
+}
+@media (max-width: 720px) {
+  :root { --cards-per-row: 1 !important; --row-height: 34px; --number-font-size: 21px; }
+  .masthead { position: static; flex-direction: column; align-items: flex-start; }
+  .actions { width: 100%; }
+  .actions .btn { flex: 1; }
+  .groups { grid-template-columns: 1fr; }
+  .intro-note { text-align: left; }
+  .cards { gap: var(--space-4); }
+}
+
+/* ── друк ──────────────────────────────────────────────── */
+@media print {
+  @page { size: A4 portrait; margin: 10mm; }
+  html, body { background: #fff; }
+  .masthead, .intro, .settings, .page-foot, .no-print { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  .sheet { padding: 0; }
+  .set { margin-top: 0; break-before: page; }
+  .set:first-child { break-before: auto; }
+  .set-head { border-bottom: 1px solid #ccc; }
+  .set-head h2 { font-size: 13pt; }
+  /* І CSS Grid, і flex ненадійно розбивають вміст на сторінки при друці
+     (break-inside у них браузери масово ігнорують, підтверджено і в
+     Chrome, і в Safari) — inline-block у звичайному блоковому потоці
+     це найстаріша й найнадійніша техніка пагінації в друці. Відступ
+     між картками — через margin, бо gap для inline-block не працює.
+     Розмір самої картки лишається таким, як налаштовано. */
+  .cards { display: block; font-size: 0; }
+  .card { display: inline-block; vertical-align: top; margin: 0 8mm 8mm 0; break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
+  .cell { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .card, .card-grid, .card-badge { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

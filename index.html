@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="uk" data-badge-position="bottom-center">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Генератор карток лото — 24 картки на 90 бочок</title>
+<meta name="description" content="Генератор друкованих карток для гри в лото: 24 унікальні картки, чотири набори по шість, числа 1–90 без повторів." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="masthead no-print">
+  <div class="masthead-brand">Лото <small>90 бочок · 24 картки</small></div>
+  <div class="actions">
+    <button type="button" class="btn btn-primary" data-action="regenerate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3L3 16" /><path d="M3 21v-5h5" /></svg>
+      Згенерувати заново
+    </button>
+    <button type="button" class="btn btn-secondary" id="download-json">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M4 21h16" /></svg>
+      Завантажити JSON
+    </button>
+    <button type="button" class="btn btn-secondary" id="download-svg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M4 21h16" /></svg>
+      Завантажити SVG
+    </button>
+    <button type="button" class="btn btn-secondary" id="print">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6" /><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" /><path d="M6 14h12v7H6z" /></svg>
+      Друк
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="intro no-print">
+    <span class="kicker">Аркуш для друку</span>
+    <h1>Двадцять чотири картки, готові до столу.</h1>
+    <p class="intro-note">Кожна картка — три рядки на дев’ять стовпців, п’ятнадцять чисел, по п’ять у рядку. Стовпець тримає свій десяток, числа в ньому зростають згори вниз. Двадцять чотири картки складені в чотири набори по шість: у межах набору числа від 1 до 90 випадають рівно по одному разу, тож набір можна роздати на шістьох і грати з одного мішечка.</p>
+    <p class="intro-meta">
+      <span>Наборів <b>4</b></span>
+      <span>Карток <b>24</b></span>
+      <span>Чисел на картці <b>15</b></span>
+    </p>
+  </section>
+
+  <details class="settings no-print" id="settings">
+    <summary>
+      Налаштування картки
+      <span class="summary-hint">
+        Живе прев’ю
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+      </span>
+    </summary>
+
+    <div class="settings-body">
+      <div class="groups">
+
+        <div class="group">
+          <span class="kicker">Заготовки</span>
+          <div class="presets">
+            <button type="button" class="btn btn-secondary btn-sm" data-preset="paper">Тепла паперова</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-preset="press">Друкарня</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-preset="quiet">Тиха</button>
+          </div>
+          <div class="field">
+            <label>Повернути все до типових значень</label>
+            <button type="button" class="btn btn-ghost btn-sm" id="reset-all">Скинути</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Кольори</span>
+          <div class="field">
+            <label for="c-bg">Фон картки</label>
+            <span class="swatch"><input type="color" id="c-bg" data-var="--card-bg" /></span>
+          </div>
+          <div class="field">
+            <label for="c-border">Рамка</label>
+            <span class="swatch"><input type="color" id="c-border" data-var="--card-border" /></span>
+          </div>
+          <div class="field">
+            <label for="c-grid">Лінії сітки</label>
+            <span class="swatch"><input type="color" id="c-grid" data-var="--grid-line" /></span>
+          </div>
+          <div class="field">
+            <label for="c-num">Числа</label>
+            <span class="swatch"><input type="color" id="c-num" data-var="--number-color" /></span>
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Числа</span>
+          <div class="field">
+            <label for="n-size">Розмір</label>
+            <span class="field-val"></span>
+            <input type="range" id="n-size" data-var="--number-font-size" min="14" max="44" step="1" />
+          </div>
+          <div class="field">
+            <label for="n-weight">Жирність</label>
+            <span class="field-val"></span>
+            <input type="range" id="n-weight" data-var="--number-font-weight" min="300" max="700" step="100" />
+          </div>
+          <div class="file-field">
+            <label class="btn btn-secondary btn-sm" for="font-file">Свій шрифт…</label>
+            <input type="file" id="font-file" accept=".ttf,.otf,.woff,.woff2" />
+            <span class="file-name" id="font-name">Overpass (типовий)</span>
+            <button type="button" class="btn btn-ghost btn-sm" id="font-reset">Повернути</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Порожні клітинки</span>
+          <div class="field">
+            <label for="n-empty-style">Стиль</label>
+            <select id="n-empty-style" data-var="emptyStyle">
+              <option value="none">Немає</option>
+              <option value="diagonal">Діагональні лінії</option>
+              <option value="cross">Сітка</option>
+              <option value="dots">Крапки</option>
+              <option value="solid">Суцільний тон</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="n-alpha">Насиченість</label>
+            <span class="field-val"></span>
+            <input type="range" id="n-alpha" data-var="--empty-pattern-alpha" min="0" max="0.4" step="0.01" />
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Сітка</span>
+          <div class="field">
+            <label class="check" for="grid-on"><input type="checkbox" id="grid-on" data-var="gridOn" /> Внутрішні лінії</label>
+          </div>
+          <div class="field">
+            <label class="check" for="grid-frame-on"><input type="checkbox" id="grid-frame-on" data-var="gridFrameOn" /> Рамка сітки</label>
+          </div>
+          <div class="field">
+            <label for="g-grid-thickness">Товщина ліній</label>
+            <span class="field-val"></span>
+            <input type="range" id="g-grid-thickness" data-var="--grid-thickness" min="0" max="4" step="1" />
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Геометрія картки</span>
+          <div class="field">
+            <label for="g-bw">Товщина рамки</label>
+            <span class="field-val"></span>
+            <input type="range" id="g-bw" data-var="--border-width" min="0" max="8" step="1" />
+          </div>
+          <div class="field">
+            <label for="g-br">Заокруглення кутів</label>
+            <span class="field-val"></span>
+            <input type="range" id="g-br" data-var="--border-radius" min="0" max="24" step="1" />
+          </div>
+          <div class="field">
+            <label for="g-pad">Внутрішні відступи</label>
+            <span class="field-val"></span>
+            <input type="range" id="g-pad" data-var="--card-padding" min="0" max="32" step="1" />
+          </div>
+          <div class="field">
+            <label for="g-row">Висота рядка</label>
+            <span class="field-val"></span>
+            <input type="range" id="g-row" data-var="--row-height" min="24" max="46" step="1" />
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Номер картки</span>
+          <div class="field">
+            <label class="check" for="badge-on"><input type="checkbox" id="badge-on" data-var="badge" /> Показувати бейдж</label>
+          </div>
+          <div class="field">
+            <label>Позиція</label>
+            <div class="badge-pos-grid">
+              <label><input type="radio" name="badge-pos" data-var="badgePosition" value="top-left" /> Згори зліва</label>
+              <label><input type="radio" name="badge-pos" data-var="badgePosition" value="top-center" /> Згори</label>
+              <label><input type="radio" name="badge-pos" data-var="badgePosition" value="top-right" /> Згори справа</label>
+              <label><input type="radio" name="badge-pos" data-var="badgePosition" value="bottom-left" /> Знизу зліва</label>
+              <label><input type="radio" name="badge-pos" data-var="badgePosition" value="bottom-center" /> Знизу</label>
+              <label><input type="radio" name="badge-pos" data-var="badgePosition" value="bottom-right" /> Знизу справа</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="b-radius">Форма</label>
+            <span class="field-val"></span>
+            <input type="range" id="b-radius" data-var="--badge-radius" min="0" max="12" step="1" />
+          </div>
+        </div>
+
+        <div class="group">
+          <span class="kicker">Аркуш</span>
+          <div class="field">
+            <label for="s-per-row">Карток у рядку</label>
+            <span class="field-val"></span>
+            <input type="range" id="s-per-row" data-var="--cards-per-row" min="1" max="2" step="1" />
+          </div>
+          <p class="preview-foot">Для друку на A4 зручні дві картки в рядку. Кожен набір починається з нової сторінки.</p>
+        </div>
+
+      </div>
+
+      <div class="preview-col">
+        <span class="kicker">Прев’ю</span>
+        <div class="preview-box">
+          <div id="preview"></div>
+          <p class="preview-foot">Зміни застосовуються одразу до всіх карток. Налаштування не зберігаються між сеансами — після перезавантаження сторінки скидаються до типових значень.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <hr class="rule no-print" />
+
+  <main class="sheet" id="sheet"></main>
+
+  <footer class="page-foot no-print">
+    <span>Друк: A4, книжкова орієнтація, поля 10&nbsp;мм.</span>
+  </footer>
+</div>
+
+<script src="vendor/opentype.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
